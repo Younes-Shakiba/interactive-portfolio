@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پورتفولیو | سلام خوش اومدی</title>
+    <!-- Rive WebGL2 Runtime -->
+    <script src="https://unpkg.com/@rive-app/webgl2@latest"></script>
+    <!-- Vazirmatn Font -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"
+    />
+    <style>
+      :root {
+        --bg-color: #ffffff;
+        --text-dark: #121212;
+        --text-muted: #666666;
+        --pill-bg: #e2ddff;
+        --arch-bg: #cbb8ff;
+        --stats-bg: #f5f3ff;
+        --font-family:
+          "Vazirmatn", -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-dark);
+        font-family: var(--font-family);
+        direction: rtl;
+        overflow-x: hidden;
+      }
+
+      /* Navigation */
+      nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 2rem 1rem 1rem;
+      }
+
+      .nav-link {
+        text-decoration: none;
+        color: var(--text-dark);
+        font-size: 0.95rem;
+        font-weight: 500;
+        padding: 0.5rem 1.25rem;
+        border-radius: 20px;
+        transition: all 0.2s ease;
+      }
+
+      .nav-link.active {
+        background-color: var(--pill-bg);
+        color: #4f3bf6;
+        font-weight: 700;
+      }
+
+      /* Hero Container */
+      .hero-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.5rem 2rem 0;
+        text-align: center;
+        position: relative;
+      }
+
+      /* Decorative Sparkle Stars */
+      .sparkle {
+        position: absolute;
+        color: #e5e0ff;
+        font-size: 2.2rem;
+        user-select: none;
+        z-index: 0;
+      }
+      .sparkle-left {
+        top: 25%;
+        left: 12%;
+      }
+      .sparkle-right {
+        top: 15%;
+        right: 12%;
+      }
+
+      /* Welcome Badge */
+      .welcome-badge {
+        display: inline-block;
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        position: relative;
+      }
+
+      .welcome-badge::after {
+        content: "";
+        display: block;
+        width: 110%;
+        height: 10px;
+        border-bottom: 2.5px solid var(--text-dark);
+        border-radius: 50%;
+        margin: -4px auto 0;
+      }
+
+      /* Main Heading */
+      .main-heading {
+        font-size: 3.25rem;
+        font-weight: 900;
+        line-height: 1.25;
+        letter-spacing: -1px;
+        margin-bottom: 2.5rem;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Grid Layout */
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1fr 460px 1fr;
+        align-items: flex-end;
+        position: relative;
+      }
+
+      /* Column Left (Testimonial) - Positioned 100px higher */
+      .col-left {
+        text-align: right;
+        padding-left: 2rem;
+        padding-bottom: 1.5rem;
+        transform: translateY(-100px);
+      }
+
+      .author-box {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .author-info h4 {
+        font-size: 0.95rem;
+        font-weight: 700;
+      }
+
+      .author-info p {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+      }
+
+      .testimonial-text {
+        font-size: 0.88rem;
+        color: var(--text-dark);
+        line-height: 1.7;
+      }
+
+      /* Column Center (Character Stage) */
+      .col-center {
+        position: relative;
+        width: 100%;
+        height: 380px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+      }
+
+      /* Purple Arch */
+      .purple-arch {
+        position: absolute;
+        bottom: 0;
+        width: 420px;
+        height: 210px;
+        background-color: var(--arch-bg);
+        border-top-left-radius: 210px;
+        border-top-right-radius: 210px;
+        z-index: 1;
+      }
+
+      /* Rive Canvas Container */
+      .rive-wrapper {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 380px;
+        z-index: 2;
+        overflow: visible;
+      }
+
+      #rive-canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      /* Baseline */
+      .hero-baseline {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 480px;
+        height: 2px;
+        background-color: #121212;
+        z-index: 3;
+      }
+
+      /* Column Right (Bio) - Positioned 100px higher */
+      .col-right {
+        text-align: right;
+        padding-right: 2rem;
+        padding-bottom: 1.5rem;
+        transform: translateY(-100px);
+      }
+
+      .bio-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+      }
+
+      .bio-desc {
+        font-size: 0.88rem;
+        color: var(--text-dark);
+        line-height: 1.7;
+        margin-bottom: 1.25rem;
+      }
+
+      .bio-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-dark);
+        font-weight: 700;
+        text-decoration: none;
+        font-size: 0.88rem;
+      }
+
+      /* Bottom Stats Bar */
+      .stats-bar {
+        background-color: var(--stats-bg);
+        border-radius: 50px;
+        padding: 1.75rem 2rem;
+        margin-top: 1.5rem;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+
+      .stat-item {
+        text-align: center;
+      }
+
+      .stat-number {
+        font-size: 2.75rem;
+        font-weight: 900;
+        color: var(--text-dark);
+        line-height: 1;
+        margin-bottom: 0.4rem;
+      }
+
+      .stat-label {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+      }
+
+      /* Responsive Breakpoint */
+      @media (max-width: 900px) {
+        .hero-grid {
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+        .col-left,
+        .col-right {
+          text-align: center;
+          padding: 0;
+          transform: translateY(0); /* Reset offset for mobile stacked layout */
+        }
+        .author-box {
+          justify-content: center;
+        }
+        .stats-bar {
+          flex-wrap: wrap;
+          gap: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <a href="#" class="nav-link active">خونه</a>
+      <a href="#projects" class="nav-link">نمونه کارها</a>
+      <a href="#blog" class="nav-link">وبلاگ</a>
+      <a href="#about" class="nav-link">درباره من</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-container">
+      <!-- Sparkles -->
+      <div class="sparkle sparkle-left">✦</div>
+      <div class="sparkle sparkle-right">✦</div>
+
+      <div class="welcome-badge">سلام. خوش اومدی</div>
+      <h1 class="main-heading">طراحی که دنبالش می‌‌‌‌گشتی<br />همین جاست!</h1>
+
+      <div class="hero-grid">
+        <!-- Left Column -->
+        <div class="col-right">
+          <h3 class="bio-title">یونس هستم، طراح رابط کاربری 👋</h3>
+          <p class="bio-desc">
+            عاشق این کارم که تجربیات کاربردی جذاب و بصری خلق کنم، جوری که کاربر
+            باهاش کیف کنه و به چیزی که می‌خواد برسه.
+          </p>
+          <a href="#about" class="bio-link">
+            میخوای بیشتر درباره من بدونی؟ ←
+          </a>
+        </div>
+
+        <!-- Center Column -->
+        <div class="col-center">
+          <div class="purple-arch"></div>
+          <div class="rive-wrapper">
+            <canvas id="rive-canvas"></canvas>
+          </div>
+          <div class="hero-baseline"></div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-left">
+          <div class="author-box">
+            <img src="./younes.webp" alt="یونس شکیبا" class="avatar" />
+            <div class="author-info">
+              <h4>یونس شکیبا</h4>
+              <p>بنیان‌گذار وبینگو</p>
+            </div>
+          </div>
+          <p class="testimonial-text">
+            تو تیم ما کلی ایده‌های خلاقانه ارائه کرد و با بقیه هم خیلی خوب کار
+            می‌کرد. خلاصه که اگه دنبال یه طراح ماهر و کاربلد می‌‌گردین، یونس رو
+            بهتون پیشنهاد می‌کنم.
+          </p>
+        </div>
+      </div>
+
+      <!-- Stats Bar -->
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-number">۳۲</div>
+          <div class="stat-label">پروژه‌های انجام شده</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">۴۱</div>
+          <div class="stat-label">طراحی وایرفریم</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">۲۰</div>
+          <div class="stat-label">طراحی لندینگ پیج</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">۱۷</div>
+          <div class="stat-label">طراحی رسپانسیو</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">۸</div>
+          <div class="stat-label">طراحی اپلیکیشن</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">۵</div>
+          <div class="stat-label">پروژه‌های دو زبانه</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rive WebGL Script -->
+    <script>
+      const canvas = document.getElementById("rive-canvas");
+
+      const r = new rive.Rive({
+        src: "science-guy.riv",
+        canvas: canvas,
+        autoplay: true,
+        autoBind: true,
+        stateMachine: "State Machine 1",
+        layout: new rive.Layout({
+          fit: rive.Fit.Contain,
+          alignment: rive.Alignment.BottomCenter,
+        }),
+        onLoad: () => {
+          r.resizeDrawingSurfaceToCanvas();
+        },
+      });
+
+      window.addEventListener("resize", () => {
+        if (r) {
+          r.resizeDrawingSurfaceToCanvas();
+        }
+      });
+    </script>
+  </body>
+</html>
